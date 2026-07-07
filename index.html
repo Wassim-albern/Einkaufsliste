@@ -46,22 +46,16 @@ placeholder="Passwort">
 
 
 <button onclick="login()">
-
 Anmelden
-
 </button>
 
 
 <button onclick="register()">
-
 Registrieren
-
 </button>
 
 
 </div>
-
-
 
 
 
@@ -73,9 +67,11 @@ Registrieren
 
 
 
-<div class="header">
+<!-- SEITEN HEADER -->
 
-🛒 Meine Einkaufsliste
+<div class="header" id="pageTitle">
+
+Liste
 
 </div>
 
@@ -90,7 +86,7 @@ Registrieren
 
 
 
-<!-- SEITEN MENÜ -->
+<!-- SEITEN MENÜ DESKTOP -->
 
 <div class="sidebar">
 
@@ -123,7 +119,8 @@ Registrieren
 
 
 
-<!-- HOME -->
+
+<!-- HOME / LISTE -->
 
 
 <div id="home">
@@ -140,7 +137,12 @@ onclick="addProduct()">
 
 
 
+
+<div class="page-list">
+
 <div id="products"></div>
+
+</div>
 
 
 
@@ -154,19 +156,12 @@ onclick="addProduct()">
 
 
 
-<!-- LÄDEN SEITE -->
+
+
+<!-- LÄDEN -->
 
 
 <div id="shopsPage" class="hidden">
-
-
-
-<h2>
-
-🏪 Meine Läden
-
-</h2>
-
 
 
 
@@ -179,11 +174,17 @@ onclick="addProduct()">
 
 
 
+<div class="page-list">
+
 <div id="shopList"></div>
+
+</div>
 
 
 
 </div>
+
+
 
 
 
@@ -200,15 +201,6 @@ onclick="addProduct()">
 
 
 
-<h2>
-
-⚙ Einstellungen
-
-</h2>
-
-
-
-
 <div class="shop-panel">
 
 
@@ -216,12 +208,10 @@ Angemeldet als:
 
 <br>
 
-
 <b id="username"></b>
 
 
 </div>
-
 
 
 
@@ -235,6 +225,8 @@ Abmelden
 
 
 </div>
+
+
 
 
 
@@ -265,17 +257,18 @@ Abmelden
 <div class="mobile-nav">
 
 
-<button onclick="showPage('home')">
 
+<button onclick="showPage('home')">
 
 🏠
 
 <span>
-Home
+Liste
 </span>
 
-
 </button>
+
+
 
 
 
@@ -283,15 +276,15 @@ Home
 
 <button onclick="showPage('shopsPage')">
 
-
 🏪
 
 <span>
 Läden
 </span>
 
-
 </button>
+
+
 
 
 
@@ -299,15 +292,14 @@ Läden
 
 <button onclick="showPage('settings')">
 
-
 ⚙️
 
 <span>
 Optionen
 </span>
 
-
 </button>
+
 
 
 
@@ -322,7 +314,10 @@ Optionen
 
 
 
-<!-- PRODUKT HINZUFÜGEN MODAL -->
+
+
+
+<!-- PRODUKT MODAL -->
 
 
 <div id="productModal" class="modal hidden">
@@ -387,15 +382,11 @@ placeholder="Name der Ware">
 
 
 
-
-
-
 <label>
 
 🔢 Anzahl
 
 </label>
-
 
 
 
@@ -419,7 +410,6 @@ placeholder="Menge">
 
 
 
-
 <select id="productUnit">
 
 
@@ -430,7 +420,6 @@ Stück
 </option>
 
 
-
 <option value="kg">
 
 kg
@@ -438,9 +427,7 @@ kg
 </option>
 
 
-
 </select>
-
 
 
 
@@ -484,9 +471,7 @@ class="add"
 
 onclick="saveProduct()">
 
-
 ✅ Speichern
-
 
 </button>
 
@@ -501,9 +486,7 @@ onclick="saveProduct()">
 
 onclick="closeProductModal()">
 
-
 ❌ Abbrechen
-
 
 </button>
 
@@ -517,6 +500,11 @@ onclick="closeProductModal()">
 
 
 </div>
+
+
+
+</div>
+
 
 <script src="app.js"></script>
 
