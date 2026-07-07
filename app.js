@@ -4,8 +4,8 @@ let data = {
 };
 
 
-
 let currentUser = null;
+
 
 
 
@@ -14,8 +14,13 @@ let currentUser = null;
 
 function register(){
 
-    let username = document.getElementById("user").value;
-    let password = document.getElementById("pass").value;
+    let username =
+    document.getElementById("user").value;
+
+
+    let password =
+    document.getElementById("pass").value;
+
 
 
     if(!username || !password){
@@ -26,11 +31,12 @@ function register(){
     }
 
 
+
     localStorage.setItem(
         "account",
         JSON.stringify({
-            username: username,
-            password: password
+            username:username,
+            password:password
         })
     );
 
@@ -43,51 +49,70 @@ function register(){
 
 
 
+
+
 // LOGIN
 
 function login(){
 
-    let account = JSON.parse(
+
+    let account =
+    JSON.parse(
         localStorage.getItem("account")
     );
 
 
-    let username = document.getElementById("user").value;
-    let password = document.getElementById("pass").value;
+
+    let username =
+    document.getElementById("user").value;
+
+
+    let password =
+    document.getElementById("pass").value;
+
 
 
 
     if(
         account &&
-        account.username === username &&
-        account.password === password
+        account.username===username &&
+        account.password===password
     ){
 
 
-        currentUser = username;
+        currentUser=username;
 
 
-        document.getElementById("login").style.display="none";
+        document.getElementById("login")
+        .style.display="none";
 
-        document.getElementById("app").style.display="block";
+
+        document.getElementById("app")
+        .style.display="block";
 
 
-        document.getElementById("username").textContent=username;
+        document.getElementById("username")
+        .textContent=username;
+
 
 
         loadData();
 
 
+        showPage("home");
+
+
     }
     else{
 
-
         alert("Login fehlgeschlagen");
-
 
     }
 
 }
+
+
+
 
 
 
@@ -100,15 +125,36 @@ function loadData(){
 
     let saved =
     localStorage.getItem(
-        "shopping_" + currentUser
+        "shopping_"+currentUser
     );
+
 
 
     if(saved){
 
-        data = JSON.parse(saved);
+        data=JSON.parse(saved);
 
     }
+
+
+
+    // alte doppelte Läden entfernen
+
+    data.shops=[
+        ...new Set(data.shops)
+    ];
+
+
+
+    // alphabetisch sortieren
+
+    data.shops.sort(
+        (a,b)=>a.localeCompare(b)
+    );
+
+
+
+    saveData();
 
 
     render();
@@ -120,21 +166,26 @@ function loadData(){
 
 
 
-// DATEN SPEICHERN
+
+
+
+// SPEICHERN
 
 function saveData(){
 
 
     localStorage.setItem(
 
-        "shopping_" + currentUser,
+        "shopping_"+currentUser,
 
         JSON.stringify(data)
 
     );
 
-
 }
+
+
+
 
 
 
@@ -145,7 +196,8 @@ function saveData(){
 function addShop(){
 
 
-    let name = prompt(
+    let name =
+    prompt(
         "Name des Ladens:"
     );
 
@@ -155,7 +207,32 @@ function addShop(){
 
 
 
+    name=name.trim();
+
+
+
+    if(data.shops.includes(name)){
+
+
+        alert(
+            "Dieser Laden existiert bereits"
+        );
+
+
+        return;
+
+    }
+
+
+
     data.shops.push(name);
+
+
+
+    data.shops.sort(
+        (a,b)=>a.localeCompare(b)
+    );
+
 
 
     saveData();
@@ -164,6 +241,11 @@ function addShop(){
 
 
 }
+
+
+
+
+
 
 
 
@@ -174,7 +256,9 @@ function addShop(){
 function deleteShop(index){
 
 
-    let shopName = data.shops[index];
+    let shopName =
+    data.shops[index];
+
 
 
     data.shops.splice(index,1);
@@ -183,7 +267,7 @@ function deleteShop(index){
 
     data.products =
     data.products.filter(
-        product => product.shop !== shopName
+        p=>p.shop!==shopName
     );
 
 
@@ -199,55 +283,74 @@ function deleteShop(index){
 
 
 
-// PRODUKT HINZUFÜGEN
+
+
+
+
+// PRODUKT FENSTER ÖFFNEN
 
 function addProduct(){
 
 
-if(data.shops.length===0){
+    if(data.shops.length===0){
 
-alert(
-"Bitte zuerst einen Laden erstellen"
-);
 
-return;
+        alert(
+            "Bitte zuerst einen Laden erstellen"
+        );
+
+
+        return;
+
+    }
+
+
+
+
+    let select =
+    document.getElementById(
+        "productShop"
+    );
+
+
+
+    select.innerHTML="";
+
+
+
+    data.shops.forEach(shop=>{
+
+
+        let option =
+        document.createElement("option");
+
+
+        option.value=shop;
+
+        option.textContent=shop;
+
+
+        select.appendChild(option);
+
+
+    });
+
+
+
+
+    document.getElementById(
+        "productModal"
+    )
+    .classList.remove("hidden");
+
 
 }
 
 
 
-let select =
-document.getElementById("productShop");
-
-
-select.innerHTML="";
 
 
 
-data.shops.forEach(shop=>{
-
-
-let option =
-document.createElement("option");
-
-
-option.value=shop;
-
-option.textContent=shop;
-
-
-select.appendChild(option);
-
-
-});
-
-
-
-document.getElementById("productModal")
-.classList.remove("hidden");
-
-
-}
 
 
 
@@ -263,8 +366,8 @@ function changeAmount(index,value){
 
 
     if(
-        value === -1 &&
-        product.count <= 1
+        value===-1 &&
+        product.count<=1
     ){
 
         return;
@@ -273,7 +376,8 @@ function changeAmount(index,value){
 
 
 
-    product.count += value;
+    product.count+=value;
+
 
 
     saveData();
@@ -282,6 +386,11 @@ function changeAmount(index,value){
 
 
 }
+
+
+
+
+
 
 
 
@@ -298,6 +407,7 @@ function removeProduct(index){
     );
 
 
+
     saveData();
 
     render();
@@ -309,10 +419,13 @@ function removeProduct(index){
 
 
 
-// ANZEIGE AKTUALISIEREN
+
+
+
+
+// ANZEIGE
 
 function render(){
-
 
 
     let shopsBox =
@@ -329,19 +442,17 @@ function render(){
 
 
     shopsBox.innerHTML="";
-
     shopList.innerHTML="";
-
     productsBox.innerHTML="";
 
 
 
 
 
-    // SIDEBAR LÄDEN
+    // DESKTOP SIDEBAR
 
     data.shops.forEach(
-        (shop,index)=>{
+    (shop,index)=>{
 
 
         let div =
@@ -353,23 +464,27 @@ function render(){
 
         div.innerHTML=`
 
-            <span>${shop}</span>
+        <span>${shop}</span>
 
-            <button onclick="deleteShop(${index})">
-            X
-            </button>
+        <span onclick="deleteShop(${index})"
+        style="cursor:pointer;font-size:22px">
+        ❌
+        </span>
 
         `;
+
 
 
         shopsBox.appendChild(div);
 
 
-        let copy =
+
+        let list =
         div.cloneNode(true);
 
 
-        shopList.appendChild(copy);
+        shopList.appendChild(list);
+
 
 
     });
@@ -378,11 +493,15 @@ function render(){
 
 
 
-    // PRODUKTE NACH LÄDEN SORTIEREN
 
+
+
+
+
+    // PRODUKTE
 
     data.shops.forEach(
-        shop=>{
+    shop=>{
 
 
         let products =
@@ -401,7 +520,9 @@ function render(){
         document.createElement("div");
 
 
+
         panel.className="shop-panel";
+
 
 
         panel.innerHTML=
@@ -413,8 +534,9 @@ function render(){
 
 
 
+
         products.forEach(
-            product=>{
+        product=>{
 
 
             let index =
@@ -426,10 +548,13 @@ function render(){
             document.createElement("div");
 
 
+
             item.className="product";
 
 
+
             item.innerHTML=
+
             `
 
             <div class="product-line">
@@ -440,11 +565,12 @@ function render(){
 
 
             <span>
-            ${product.count}
+            ${product.count} ${product.unit}
             </span>
 
 
             </div>
+
 
 
             <div class="note">
@@ -454,25 +580,23 @@ function render(){
             </div>
 
 
+
             <div class="actions">
 
 
-            <button class="up"
-            onclick="changeAmount(${index},1)">
-            ⬆
-            </button>
+            <span onclick="changeAmount(${index},1)">
+            ⬆️
+            </span>
 
 
-            <button class="down"
-            onclick="changeAmount(${index},-1)">
-            ⬇
-            </button>
+            <span onclick="changeAmount(${index},-1)">
+            ⬇️
+            </span>
 
 
-            <button class="delete"
-            onclick="removeProduct(${index})">
-            X
-            </button>
+            <span onclick="removeProduct(${index})">
+            ❌
+            </span>
 
 
             </div>
@@ -502,9 +626,14 @@ function render(){
 
 
 
-// SEITEN WECHSEL
+
+
+
+
+// SEITE WECHSELN
 
 function showPage(page){
+
 
 
     document.getElementById("home")
@@ -520,11 +649,46 @@ function showPage(page){
 
 
 
+
     document.getElementById(page)
     .classList.remove("hidden");
 
 
+
+
+    let title =
+    document.getElementById(
+        "pageTitle"
+    );
+
+
+
+    if(page==="home"){
+
+        title.textContent="Liste";
+
+    }
+
+
+    if(page==="shopsPage"){
+
+        title.textContent="Meine Läden";
+
+    }
+
+
+    if(page==="settings"){
+
+        title.textContent="Einstellungen";
+
+    }
+
+
 }
+
+
+
+
 
 
 
@@ -538,6 +702,7 @@ function logout(){
     currentUser=null;
 
 
+
     document.getElementById("app")
     .style.display="none";
 
@@ -547,89 +712,122 @@ function logout(){
 
 
 }
+
+
+
+
+
+
+
+
+
+// MODAL SCHLIESSEN + LEEREN
+
 function closeProductModal(){
 
 
-document.getElementById("productModal")
-.classList.add("hidden");
+    document.getElementById("productName").value="";
 
+
+    document.getElementById("productAmount").value="";
+
+
+    document.getElementById("productNote").value="";
+
+
+
+    document.getElementById("productModal")
+    .classList.add("hidden");
 
 
 }
 
 
+
+
+
+
+
+
+
+// PRODUKT SPEICHERN
 
 function saveProduct(){
 
 
-let name =
-document.getElementById("productName").value;
+    let name =
+    document.getElementById("productName").value;
 
 
-let shop =
-document.getElementById("productShop").value;
+    let shop =
+    document.getElementById("productShop").value;
 
 
-let amount =
-Number(
-document.getElementById("productAmount").value
-);
+    let amount =
+    Number(
+        document.getElementById("productAmount").value
+    );
 
 
-
-let unit =
-document.getElementById("productUnit").value;
-
-
-
-let note =
-document.getElementById("productNote").value;
+    let unit =
+    document.getElementById("productUnit").value;
 
 
 
-if(
-!name ||
-!amount ||
-!shop
-){
-
-alert("Bitte alle Felder ausfüllen");
-
-return;
-
-}
+    let note =
+    document.getElementById("productNote").value;
 
 
 
-data.products.push({
 
-name:name,
+    if(!name || !amount || !shop){
 
-count:amount,
+        alert(
+            "Bitte alle Felder ausfüllen"
+        );
 
-unit:unit,
+        return;
 
-shop:shop,
-
-note:note
-
-});
+    }
 
 
 
-saveData();
-
-render();
 
 
+    data.products.push({
 
-document.getElementById("productName").value="";
-document.getElementById("productAmount").value="";
-document.getElementById("productNote").value="";
+        name:name,
+
+        count:amount,
+
+        unit:unit,
+
+        shop:shop,
+
+        note:note
+
+    });
 
 
 
-closeProductModal();
+
+
+    saveData();
+
+    render();
+
+
+
+
+    // Fenster bleibt offen,
+    // Felder werden geleert
+
+
+    document.getElementById("productName").value="";
+
+    document.getElementById("productAmount").value="";
+
+    document.getElementById("productNote").value="";
 
 
 }
