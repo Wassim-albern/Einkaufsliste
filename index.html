@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meine Einkaufsliste</title>
+
+    <!-- Manifest -->
+    <link rel="manifest" href="./manifest.json?v=2">
+
+    <!-- Apple Icons -->
+    <link rel="apple-touch-icon" href="./icon-180.png">
+    <link rel="apple-touch-icon" href="./icon-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="./icon-512.png">
+
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Meine Einkaufsliste">
+
+    <!-- Android -->
+    <meta name="theme-color" content="#041329">
+    <meta name="background-color" content="#041329">
+
+    <!-- Beschreibung -->
+    <meta name="description" content="Moderne Einkaufsliste als installierbare Web-App.">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
+
+<style>
+
+
+*{
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+
+body{
+
+    margin:0;
+    background:#041329;
+    color:white;
+
+}
+
+
+/* LOGIN */
+
+.login-box{
+
+    width:350px;
+    max-width:90%;
+
+    margin:80px auto;
+
+    background:#10294d;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    box-shadow:0 0 30px #000;
+
+}
+
+
+
+input,button{
+
+    width:100%;
+
+    padding:14px;
+
+    margin:8px 0;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+}
+
+
+input{
+
+    background:#edf4ff;
+
+}
+
+
+button{
+
+    background:#2878ff;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+
+
+button:hover{
+
+    transform:scale(1.03);
+
+    background:#4b91ff;
+
+}
+
+
+
+
+/* APP */
+
+
+#app{
+
+display:none;
+
+}
+
+
+
+.header{
+
+background:#091e3d;
+
+padding:20px;
+
+font-size:24px;
+
+text-align:center;
+
+}
+
+
+
+
+
+.container{
+
+display:flex;
+
+min-height:calc(100vh - 70px);
+
+}
+
+
+
+
+
+/* SIDEBAR */
+
+
+.sidebar{
+
+width:260px;
+
+background:#081a34;
+
+padding:20px;
+
+}
+
+
+
+.shop{
+
+background:#183963;
+
+padding:15px;
+
+border-radius:15px;
+
+margin-top:10px;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+
+.shop:hover{
+
+background:#24528b;
+
+}
+
+
+
+
+
+/* CONTENT */
+
+
+.content{
+
+flex:1;
+
+padding:25px;
+
+}
+
+
+
+.page{
+
+animation:fade .3s;
+
+}
+
+
+.hidden{
+
+display:none;
+
+}
+
+
+
+@keyframes fade{
+
+
+from{
+
+opacity:0;
+transform:translateY(20px);
+
+}
+
+
+to{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+
+}
+
+
+
+
+
+/* PANELS */
+
+
+.panel{
+
+
+background:#173961;
+
+padding:20px;
+
+border-radius:20px;
+
+margin-bottom:20px;
+
+box-shadow:0 10px 30px #0005;
+
+
+}
+
+
+
+.product{
+
+
+background:#235083;
+
+padding:15px;
+
+border-radius:15px;
+
+margin-top:12px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+
+}
+
+
+
+.actions{
+
+display:flex;
+
+gap:5px;
+
+}
+
+
+
+.actions button{
+
+width:45px;
+
+height:40px;
+
+padding:5px;
+
+font-size:20px;
+
+}
+
+
+
+
+
+.add{
+
+background:#00b894;
+
+}
+
+
+
+
+
+/* MOBILE NAV */
+
+
+.mobile-nav{
+
+display:none;
+
+}
+
+
+
+
+/* MOBILE */
+
+
+@media(max-width:700px){
+
+
+.header{
+
+font-size:20px;
+
+}
+
+
+
+.container{
+
+display:block;
+
+padding-bottom:90px;
+
+}
+
+
+
+.sidebar{
+
+width:100%;
+
+padding:15px;
+
+}
+
+
+
+.sidebar h3{
+
+text-align:center;
+
+}
+
+
+
+
+#shops{
+
+display:flex;
+
+overflow-x:auto;
+
+gap:10px;
+
+}
+
+
+
+.shop{
+
+min-width:130px;
+
+text-align:center;
+
+}
+
+
+
+
+.content{
+
+padding:15px;
+
+}
+
+
+
+
+.panel{
+
+padding:15px;
+
+}
+
+
+
+.product{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:15px;
+
+}
+
+
+
+.actions{
+
+width:100%;
+
+justify-content:flex-end;
+
+}
+
+
+
+.actions button{
+
+width:55px;
+
+height:45px;
+
+}
+
+
+
+
+.mobile-nav{
+
+
+position:fixed;
+
+bottom:0;
+
+left:0;
+
+width:100%;
+
+height:75px;
+
+background:#071a35;
+
+display:flex;
+
+justify-content:space-around;
+
+align-items:center;
+
+z-index:50;
+
+box-shadow:0 -5px 20px #000;
+
+
+}
+
+
+
+.mobile-nav button{
+
+background:none;
+
+font-size:25px;
+
+padding:5px;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+
+
+.mobile-nav span{
+
+font-size:12px;
+
+}
+
+
+
+}
+
+
+
+
+</style>
+
+</head>
+
+
+<body>
+<!-- LOGIN BEREICH -->
+
+<div id="login" class="login-box">
+
+<h2>🛒 Einkaufsliste</h2>
+
+<p>Anmelden oder registrieren</p>
+
+
+<input id="user" placeholder="Email oder Telefonnummer">
+
+
+<input 
+id="pass" 
+type="password" 
+placeholder="Passwort">
+
+
+<button onclick="login()">
+Anmelden
+</button>
+
+
+<button onclick="register()">
+Registrieren
+</button>
+
+
+</div>
+
+
+
+
+
+<!-- APP -->
+
+<div id="app">
+
+
+<div class="header">
+
+🛒 Meine Einkaufsliste
+
+</div>
+
+
+
+<div class="container">
+
+
+
+<!-- LINKES MENÜ -->
+
+
+<div class="sidebar">
+
+
+<h3>🏪 Läden</h3>
+
+
+<button onclick="addShop()">
+
++ Laden hinzufügen
+
+</button>
+
+
+
+<div id="shops"></div>
+
+
+
+</div>
+
+
+
+
+
+<!-- HAUPTBEREICH -->
+
+
+<div class="content">
+
+
+
+<!-- HOME -->
+
+
+<div id="home" class="page">
+
+
+<button class="add" onclick="addProduct()">
+
++ Einkauf hinzufügen
+
+</button>
+
+
+
+<div id="products"></div>
+
+
+</div>
+
+
+
+
+
+<!-- LÄDEN MOBILE -->
+
+
+<div id="shopsPage" class="page hidden">
+
+
+<h2>
+🏪 Meine Läden
+</h2>
+
+
+<button onclick="addShop()">
+
++ Laden hinzufügen
+
+</button>
+
+
+<div id="shopsMobile"></div>
+
+
+
+</div>
+
+
+
+
+
+
+<!-- EINSTELLUNGEN -->
+
+
+<div id="settings" class="page hidden">
+
+
+<h2>
+⚙ Einstellungen
+</h2>
+
+
+
+<div class="panel">
+
+<p>
+Angemeldet als:
+</p>
+
+
+<b id="username"></b>
+
+
+</div>
+
+
+
+<button onclick="logout()">
+
+Abmelden
+
+</button>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- MOBILE NAVIGATION -->
+
+
+<div class="mobile-nav">
+
+
+<button onclick="showPage('home')">
+
+🏠
+
+<span>
+Home
+</span>
+
+</button>
+
+
+
+
+<button onclick="showPage('shopsPage')">
+
+🏪
+
+<span>
+Läden
+</span>
+
+</button>
+
+
+
+
+
+<button onclick="showPage('settings')">
+
+⚙️
+
+<span>
+Optionen
+</span>
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<script>
+
+
+let currentUser=null;
+
+
+
+let data={
+
+shops:[],
+
+products:[]
+
+};
+
+
+
+
+
+// REGISTRIEREN
+
+
+function register(){
+
+
+let user=
+document.getElementById("user").value;
+
+
+let pass=
+document.getElementById("pass").value;
+
+
+
+if(!user || !pass){
+
+alert("Bitte Daten eingeben");
+
+return;
+
+}
+
+
+
+localStorage.setItem(
+
+"account",
+
+JSON.stringify({
+
+user:user,
+
+pass:pass
+
+})
+
+);
+
+
+
+alert("Registrierung erfolgreich");
+
+
+}
+
+
+
+
+
+// LOGIN
+
+
+function login(){
+
+
+
+let saved=
+JSON.parse(
+localStorage.getItem("account")
+);
+
+
+
+let user=
+document.getElementById("user").value;
+
+
+let pass=
+document.getElementById("pass").value;
+
+
+
+if(saved &&
+saved.user===user &&
+saved.pass===pass){
+
+
+
+currentUser=user;
+
+
+
+document.getElementById("login")
+.style.display="none";
+
+
+
+document.getElementById("app")
+.style.display="block";
+
+
+
+document.getElementById("username")
+.innerHTML=user;
+
+
+
+loadData();
+
+
+
+}
+
+else{
+
+
+alert("Login fehlgeschlagen");
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+// DATEN LADEN
+
+
+
+function loadData(){
+
+
+let saved=
+localStorage.getItem("shoppingData");
+
+
+
+if(saved){
+
+data=JSON.parse(saved);
+
+}
+
+
+
+render();
+
+
+
+}
+
+
+
+
+
+
+function save(){
+
+
+localStorage.setItem(
+
+"shoppingData",
+
+JSON.stringify(data)
+
+);
+
+
+}
+
+
+
+
+
+
+
+// LADEN HINZUFÜGEN
+
+
+
+function addShop(){
+
+
+
+let name=
+prompt(
+"Name des Ladens:"
+);
+
+
+
+if(!name)return;
+
+
+
+data.shops.push(name);
+
+
+
+save();
+
+render();
+
+
+}
+
+
+
+
+
+
+
+
+// PRODUKT HINZUFÜGEN
+
+
+
+function addProduct(){
+
+
+
+if(data.shops.length===0){
+
+alert(
+"Bitte zuerst einen Laden erstellen"
+);
+
+return;
+
+}
+
+
+
+
+let name=
+prompt(
+"Produktname:"
+);
+
+
+
+let amount=
+prompt(
+"Anzahl:"
+);
+
+
+
+let shop=
+prompt(
+
+"Laden auswählen:\n\n"
++
+data.shops.join("\n")
+
+);
+
+
+
+
+if(
+!name ||
+!amount ||
+!data.shops.includes(shop)
+
+){
+
+return;
+
+}
+
+
+
+data.products.push({
+
+name:name,
+
+count:Number(amount),
+
+shop:shop
+
+});
+
+
+
+save();
+
+
+render();
+
+
+
+}
+
+
+
+
+
+
+// MENGE ÄNDERN
+
+
+
+function changeAmount(index,value){
+
+
+
+data.products[index].count += value;
+
+
+
+if(data.products[index].count<=0){
+
+data.products.splice(index,1);
+
+}
+
+
+
+save();
+
+render();
+
+
+}
+
+
+
+
+
+
+// LÖSCHEN
+
+
+
+function removeProduct(index){
+
+
+data.products.splice(index,1);
+
+
+
+save();
+
+
+render();
+
+
+}
+
+
+
+
+
+
+
+
+// SEITEN WECHSEL
+
+
+
+function showPage(page){
+
+
+
+document.querySelectorAll(".page")
+.forEach(p=>{
+
+
+p.classList.add("hidden");
+
+
+});
+
+
+
+document.getElementById(page)
+.classList.remove("hidden");
+
+
+}
+
+
+
+
+
+
+// LOGOUT
+
+
+function logout(){
+
+
+
+currentUser=null;
+
+
+
+document.getElementById("app")
+.style.display="none";
+
+
+
+document.getElementById("login")
+.style.display="block";
+
+
+
+}
+</script>
+
+</body>
+</html>
