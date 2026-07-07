@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Meine Einkaufsliste</title>
+
+<link rel="manifest" href="./manifest.json">
+
+<link rel="apple-touch-icon" href="./icon-192.png">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Meine Einkaufsliste">
+
+<meta name="theme-color" content="#041329">
+
+<link rel="icon" href="./icon-192.png">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div id="login" class="login-box">
+
+<h2>🛒 Einkaufsliste</h2>
+
+<p>Anmelden oder registrieren</p>
+
+<input id="user" placeholder="Email oder Telefonnummer">
+
+<input id="pass" type="password" placeholder="Passwort">
+
+<button onclick="login()">
+Anmelden
+</button>
+
+<button onclick="register()">
+Registrieren
+</button>
+
+</div>
+
+<div id="app">
+
+<div class="header">
+🛒 Meine Einkaufsliste
+</div>
+
+<div class="container">
+
+<div class="sidebar">
+
+<h3>🏪 Läden</h3>
+
+<button onclick="addShop()">
++ Laden hinzufügen
+</button>
+
+<div id="shops"></div>
+
+</div>
+
+<div class="content">
+
+<div id="home" class="page">
+
+<button class="add" onclick="addProduct()">
++ Einkauf hinzufügen
+</button>
+
+<div id="products"></div>
+
+</div>
+
+<div id="shopsPage" class="page hidden">
+
+<h2>
+🏪 Meine Läden
+</h2>
+
+<button onclick="addShop()">
++ Laden hinzufügen
+</button>
+
+<div id="shopsMobile"></div>
+
+</div>
+
+<div id="settings" class="page hidden">
+
+<h2>
+⚙ Einstellungen
+</h2>
+
+<div class="panel">
+
+<p>
+Angemeldet als:
+</p>
+
+<b id="username"></b>
+
+</div>
+
+<button onclick="logout()">
+Abmelden
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mobile-nav">
+
+<button onclick="showPage('home')">
+🏠
+<span>Home</span>
+</button>
+
+<button onclick="showPage('shopsPage')">
+🏪
+<span>Läden</span>
+</button>
+
+<button onclick="showPage('settings')">
+⚙️
+<span>Optionen</span>
+</button>
+
+</div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
