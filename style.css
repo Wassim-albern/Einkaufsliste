@@ -4,10 +4,51 @@ font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
+
 margin:0;
 background:#041329;
 color:white;
+
 }
+
+
+button,input{
+
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+margin:6px 0;
+font-size:16px;
+
+}
+
+
+input{
+
+background:white;
+
+}
+
+
+button{
+
+background:#2878ff;
+color:white;
+cursor:pointer;
+
+}
+
+
+button:hover{
+
+opacity:.85;
+
+}
+
+
+
+/* LOGIN */
 
 .login-box{
 
@@ -15,50 +56,21 @@ width:350px;
 max-width:90%;
 margin:80px auto;
 background:#10294d;
-padding:30px;
+padding:25px;
 border-radius:20px;
-box-shadow:0 0 30px #000;
 
 }
 
-input,button{
 
-width:100%;
-padding:14px;
-margin:8px 0;
-border:none;
-border-radius:12px;
-font-size:16px;
 
-}
-
-input{
-
-background:#edf4ff;
-
-}
-
-button{
-
-background:#2878ff;
-color:white;
-cursor:pointer;
-transition:.2s;
-
-}
-
-button:hover{
-
-transform:scale(1.03);
-background:#4b91ff;
-
-}
+/* APP */
 
 #app{
 
 display:none;
 
 }
+
 
 .header{
 
@@ -69,12 +81,18 @@ text-align:center;
 
 }
 
+
+
 .container{
 
 display:flex;
 min-height:calc(100vh - 70px);
 
 }
+
+
+
+/* SIDEBAR */
 
 .sidebar{
 
@@ -84,29 +102,62 @@ padding:20px;
 
 }
 
+
 .shop{
 
 background:#183963;
 padding:15px;
 border-radius:15px;
 margin-top:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 
 }
+
+
+.shop button{
+
+width:45px;
+background:#d63031;
+
+}
+
+
+
+/* CONTENT */
 
 .content{
 
 flex:1;
-padding:25px;
+padding:20px;
+overflow:auto;
 
 }
+
+
 
 .hidden{
 
-display:none;
+display:none !important;
 
 }
 
-.panel{
+
+
+/* BUTTONS */
+
+.add{
+
+background:#00b894;
+
+}
+
+
+
+/* SHOP PANELS */
+
+.shop-panel{
 
 background:#173961;
 padding:20px;
@@ -115,17 +166,28 @@ margin-bottom:20px;
 
 }
 
+
+
 .product{
 
 background:#235083;
 padding:15px;
 border-radius:15px;
-margin-top:12px;
+margin-top:10px;
+
+}
+
+
+
+.product-line{
+
 display:flex;
 justify-content:space-between;
 align-items:center;
 
 }
+
+
 
 .actions{
 
@@ -134,19 +196,49 @@ gap:5px;
 
 }
 
+
 .actions button{
 
 width:45px;
-height:40px;
-padding:5px;
+padding:8px;
 
 }
 
-.add{
+
+
+.up{
 
 background:#00b894;
 
 }
+
+
+.down{
+
+background:#636e72;
+
+}
+
+
+.delete{
+
+background:#d63031;
+
+}
+
+
+
+.note{
+
+color:#ddd;
+font-size:14px;
+
+}
+
+
+
+/* MOBILE NAV */
+
 
 .mobile-nav{
 
@@ -154,34 +246,25 @@ display:none;
 
 }
 
+
 @media(max-width:700px){
+
 
 .container{
 
 display:block;
-padding-bottom:90px;
+padding-bottom:80px;
 
 }
+
 
 .sidebar{
 
-width:100%;
+display:none;
 
 }
 
-#shops{
 
-display:flex;
-overflow-x:auto;
-gap:10px;
-
-}
-
-.shop{
-
-min-width:130px;
-
-}
 
 .content{
 
@@ -189,26 +272,23 @@ padding:15px;
 
 }
 
-.product{
 
-flex-direction:column;
-align-items:flex-start;
-
-}
 
 .mobile-nav{
 
+display:flex;
 position:fixed;
 bottom:0;
 left:0;
-width:100%;
 height:75px;
+width:100%;
 background:#071a35;
-display:flex;
 justify-content:space-around;
 align-items:center;
 
 }
+
+
 
 .mobile-nav button{
 
@@ -216,9 +296,95 @@ background:none;
 
 }
 
+
 .mobile-nav span{
 
+display:block;
 font-size:12px;
+
+}
+
+.modal{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#0008;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:100;
+
+}
+
+
+
+.modal-box{
+
+background:#10294d;
+padding:25px;
+border-radius:20px;
+width:90%;
+max-width:400px;
+
+
+}
+
+
+
+.modal-box label{
+
+display:block;
+margin-top:10px;
+
+}
+
+
+
+.modal-box select,
+.modal-box textarea{
+
+width:100%;
+padding:14px;
+border-radius:12px;
+border:none;
+margin-top:5px;
+
+}
+
+
+
+.amount-box{
+
+display:flex;
+gap:10px;
+
+}
+
+
+
+.amount-box input{
+
+flex:1;
+
+}
+
+
+
+.amount-box select{
+
+width:100px;
+
+}
+
+
+
+textarea{
+
+height:90px;
+resize:none;
 
 }
 
