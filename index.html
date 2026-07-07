@@ -28,114 +28,493 @@
 
 <div id="login" class="login-box">
 
-<h2>🛒 Einkaufsliste</h2>
 
-<p>Anmelden oder registrieren</p>
+<h2>
+🛒 Einkaufsliste
+</h2>
 
-<input id="user" placeholder="Email oder Telefonnummer">
 
-<input id="pass" type="password" placeholder="Passwort">
+<input 
+id="user" 
+placeholder="Benutzer">
+
+
+<input 
+id="pass" 
+type="password" 
+placeholder="Passwort">
+
 
 <button onclick="login()">
+
 Anmelden
+
 </button>
+
 
 <button onclick="register()">
+
 Registrieren
+
 </button>
 
+
 </div>
+
+
+
+
+
+
+
+<!-- APP -->
 
 <div id="app">
 
+
+
 <div class="header">
+
 🛒 Meine Einkaufsliste
+
 </div>
+
+
+
+
+
 
 <div class="container">
 
+
+
+
+
+<!-- SEITEN MENÜ -->
+
 <div class="sidebar">
 
-<h3>🏪 Läden</h3>
 
-<button onclick="addShop()">
-+ Laden hinzufügen
-</button>
+<h3>
+🏪 Läden
+</h3>
+
 
 <div id="shops"></div>
 
+
 </div>
+
+
+
+
+
+
+
+
+
+<!-- HAUPTBEREICH -->
+
 
 <div class="content">
 
-<div id="home" class="page">
 
-<button class="add" onclick="addProduct()">
+
+
+
+
+<!-- HOME -->
+
+
+<div id="home">
+
+
+
+<button 
+class="add" 
+onclick="addProduct()">
+
 + Einkauf hinzufügen
+
 </button>
+
+
 
 <div id="products"></div>
 
+
+
 </div>
 
-<div id="shopsPage" class="page hidden">
+
+
+
+
+
+
+
+
+<!-- LÄDEN SEITE -->
+
+
+<div id="shopsPage" class="hidden">
+
+
 
 <h2>
+
 🏪 Meine Läden
+
 </h2>
+
+
+
 
 <button onclick="addShop()">
+
 + Laden hinzufügen
+
 </button>
 
-<div id="shopsMobile"></div>
+
+
+
+<div id="shopList"></div>
+
+
 
 </div>
 
-<div id="settings" class="page hidden">
+
+
+
+
+
+
+
+
+<!-- EINSTELLUNGEN -->
+
+
+<div id="settings" class="hidden">
+
+
 
 <h2>
+
 ⚙ Einstellungen
+
 </h2>
 
-<div class="panel">
 
-<p>
+
+
+<div class="shop-panel">
+
+
 Angemeldet als:
-</p>
+
+<br>
+
 
 <b id="username"></b>
 
+
 </div>
+
+
+
+
 
 <button onclick="logout()">
+
 Abmelden
+
 </button>
 
-</div>
+
 
 </div>
 
+
+
+
+
+
 </div>
+
+<!-- content Ende -->
+
+
+
+</div>
+
+<!-- container Ende -->
+
+
+
+
+
+
+
+
+
+<!-- MOBILE NAVIGATION -->
+
 
 <div class="mobile-nav">
 
+
 <button onclick="showPage('home')">
+
+
 🏠
-<span>Home</span>
+
+<span>
+Home
+</span>
+
+
 </button>
+
+
+
+
 
 <button onclick="showPage('shopsPage')">
+
+
 🏪
-<span>Läden</span>
+
+<span>
+Läden
+</span>
+
+
 </button>
+
+
+
+
 
 <button onclick="showPage('settings')">
+
+
 ⚙️
-<span>Optionen</span>
+
+<span>
+Optionen
+</span>
+
+
 </button>
 
+
+
 </div>
+
+
+
+
+
+
+
+
+
+
+<!-- PRODUKT HINZUFÜGEN MODAL -->
+
+
+<div id="productModal" class="modal hidden">
+
+
+
+<div class="modal-box">
+
+
+
+
+
+<h2>
+
+🛒 Einkauf hinzufügen
+
+</h2>
+
+
+
+
+
+
+
+
+<label>
+
+🏪 Laden
+
+</label>
+
+
+
+<select id="productShop">
+
+</select>
+
+
+
+
+
+
+
+
+
+<label>
+
+🛒 Ware
+
+</label>
+
+
+
+<input
+
+id="productName"
+
+type="text"
+
+placeholder="Name der Ware">
+
+
+
+
+
+
+
+<label>
+
+🔢 Anzahl
+
+</label>
+
+
+
+
+<div class="amount-box">
+
+
+
+<input
+
+id="productAmount"
+
+type="number"
+
+min="1"
+
+inputmode="numeric"
+
+placeholder="Menge">
+
+
+
+
+
+
+<select id="productUnit">
+
+
+<option value="Stück">
+
+Stück
+
+</option>
+
+
+
+<option value="kg">
+
+kg
+
+</option>
+
+
+
+</select>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<label>
+
+📝 Notiz
+
+</label>
+
+
+
+<textarea
+
+id="productNote"
+
+placeholder="Notiz">
+
+</textarea>
+
+
+
+
+
+
+
+
+
+<button
+
+class="add"
+
+onclick="saveProduct()">
+
+
+✅ Speichern
+
+
+</button>
+
+
+
+
+
+
+
+
+<button
+
+onclick="closeProductModal()">
+
+
+❌ Abbrechen
+
+
+</button>
+
+
+
+
+
+
+
+</div>
+
 
 </div>
 
