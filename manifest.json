@@ -1,6 +1,6 @@
 {
-  "name": "Finanz Tracker",
-  "short_name": "Finanzen",
+  "name": "Einkaufsliste",
+  "short_name": "Einkaufsliste",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
