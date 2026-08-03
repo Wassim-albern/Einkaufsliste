@@ -1,765 +1,738 @@
-let data = {
-    shops: [],
-    products: []
-};
+const supabaseClient = supabase.createClient(
+"https://alzdmqmzaoglexlalrzd.supabase.co",
+"sb_publishable_sJT2Vrd4lvQDD2GiqLMQYA_oS-4WF7f"
+);
 
+
+// ===================================
+// TEST SUPABASE
+// ===================================
+
+async function testSupabase(){
+
+const { data, error } =
+await supabaseClient
+.from("products")
+.select("*");
+
+console.log("Supabase Daten:", data);
+console.log("Supabase Fehler:", error);
+
+}
+
+testSupabase();
+
+
+// ===================================
+// DATEN
+// ===================================
+
+let data = {
+shops: [],
+products: []
+};
 
 let currentUser = null;
 
 
-
-
-
+// ===================================
 // REGISTRIEREN
+// ===================================
 
-function register(){
+// ===================================
+// REGISTRIEREN
+// ===================================
 
-    let username =
-    document.getElementById("user").value;
+async function register(){
 
+let username =
+document.getElementById("user").value;
 
-    let password =
-    document.getElementById("pass").value;
-
-
-
-    if(!username || !password){
-
-        alert("Bitte Benutzer und Passwort eingeben");
-        return;
-
-    }
+let password =
+document.getElementById("pass").value;
 
 
+if(!username || !password){
 
-    localStorage.setItem(
-        "account",
-        JSON.stringify({
-            username:username,
-            password:password
-        })
-    );
+alert(
+"Bitte Benutzername und Passwort eingeben"
+);
 
-
-    alert("Registrierung erfolgreich");
+return;
 
 }
 
 
+// interne E-Mail erzeugen
+let email =
+username + "@app.local";
 
 
+const { data, error } =
+await supabaseClient.auth.signUp({
+
+email: email,
+
+password: password
+
+});
 
 
+if(error){
 
+console.log(error);
+
+alert(error.message);
+
+return;
+
+}
+
+
+console.log("User erstellt:", data.user);
+
+
+// Benutzername speichern
+
+const { error: profileError } =
+await supabaseClient
+.from("profiles")
+.insert({
+
+id: data.user.id,
+
+username: username
+
+});
+
+
+if(profileError){
+
+console.log(profileError);
+
+alert(profileError.message);
+
+return;
+
+}
+
+
+alert(
+"Registrierung erfolgreich"
+);
+
+
+}
+// ===================================
 // LOGIN
+// ===================================
 
-function login(){
+async function login(){
 
-
-    let account =
-    JSON.parse(
-        localStorage.getItem("account")
-    );
+let username =
+document.getElementById("user").value;
 
 
-
-    let username =
-    document.getElementById("user").value;
-
-
-    let password =
-    document.getElementById("pass").value;
+let password =
+document.getElementById("pass").value;
 
 
+// interne E-Mail wieder erzeugen
+let email =
+username + "@app.local";
 
 
-    if(
-        account &&
-        account.username===username &&
-        account.password===password
-    ){
+const {
+data: loginData,
+error
+} =
+await supabaseClient.auth.signInWithPassword({
+
+email: email,
+
+password: password
+
+});
 
 
-        currentUser=username;
+if(error){
+
+console.log(error);
+
+alert(
+"Login fehlgeschlagen"
+);
+
+return;
+
+}
 
 
-        document.getElementById("login")
-        .style.display="none";
+currentUser =
+loginData.user.id;
 
 
-        document.getElementById("app")
-        .style.display="block";
+document.getElementById("login")
+.style.display="none";
 
 
-        document.getElementById("username")
-        .textContent=username;
+document.getElementById("app")
+.style.display="block";
+
+
+document.getElementById("username")
+.textContent=username;
+
+
+await loadData();
+
+
+showPage("home");
+
+
+}
+// ===================================
+// DATEN LADEN (SUPABASE)
+// ===================================
+
+async function loadData(){
+
+const { data: products, error } =
+await supabaseClient
+.from("products")
+.select("*")
+.eq(
+"user_id",
+currentUser
+);
 
 
 
-        loadData();
+if(error){
 
+console.log(error);
 
-        showPage("home");
-
-
-    }
-    else{
-
-        alert("Login fehlgeschlagen");
-
-    }
+return;
 
 }
 
 
 
+data.products = products || [];
 
 
+data.shops = [
+...new Set(
+data.products.map(
+p => p.shop
+)
+)
+];
 
 
-
-// DATEN LADEN
-
-function loadData(){
-
-
-    let saved =
-    localStorage.getItem(
-        "shopping_"+currentUser
-    );
+data.shops.sort(
+(a,b)=>a.localeCompare(b)
+);
 
 
-
-    if(saved){
-
-        data=JSON.parse(saved);
-
-    }
-
-
-
-    // alte doppelte Läden entfernen
-
-    data.shops=[
-        ...new Set(data.shops)
-    ];
-
-
-
-    // alphabetisch sortieren
-
-    data.shops.sort(
-        (a,b)=>a.localeCompare(b)
-    );
-
-
-
-    saveData();
-
-
-    render();
-
+render();
 
 }
-
-
-
-
-
-
-
-
-// SPEICHERN
+// ===================================
+// LEERE ALTE SPEICHERFUNKTION
+// ===================================
 
 function saveData(){
 
-
-    localStorage.setItem(
-
-        "shopping_"+currentUser,
-
-        JSON.stringify(data)
-
-    );
+// nicht mehr benötigt
 
 }
 
 
-
-
-
-
-
-
+// ===================================
 // LADEN HINZUFÜGEN
+// ===================================
 
 function addShop(){
 
-
-    let name =
-    prompt(
-        "Name des Ladens:"
-    );
-
-
-    if(!name)
-        return;
+let name =
+prompt(
+"Name des Ladens:"
+);
 
 
-
-    name=name.trim();
-
-
-
-    if(data.shops.includes(name)){
+if(!name)
+return;
 
 
-        alert(
-            "Dieser Laden existiert bereits"
-        );
+name = name.trim();
 
 
-        return;
+if(data.shops.includes(name)){
 
-    }
+alert(
+"Dieser Laden existiert bereits"
+);
 
-
-
-    data.shops.push(name);
-
-
-
-    data.shops.sort(
-        (a,b)=>a.localeCompare(b)
-    );
-
-
-
-    saveData();
-
-    render();
-
+return;
 
 }
 
 
+data.shops.push(name);
 
 
+data.shops.sort(
+(a,b)=>a.localeCompare(b)
+);
 
 
+render();
+
+}
 
 
-
-
+// ===================================
 // LADEN LÖSCHEN
+// ===================================
 
-function deleteShop(index){
+async function deleteShop(index){
 
-
-    let shopName =
-    data.shops[index];
-
-
-
-    data.shops.splice(index,1);
+let shopName =
+data.shops[index];
 
 
+const { error } =
+await supabaseClient
+.from("products")
+.delete()
+.eq(
+"shop",
+shopName
+)
+.eq(
+"user_id",
+currentUser
+);
 
-    data.products =
-    data.products.filter(
-        p=>p.shop!==shopName
-    );
 
+if(error){
 
-
-    saveData();
-
-    render();
-
+console.log(error);
+return;
 
 }
 
 
+await loadData();
 
-
-
-
-
-
-
+}
+// ===================================
 // PRODUKT FENSTER ÖFFNEN
+// ===================================
 
 function addProduct(){
 
+if(data.shops.length === 0){
 
-    if(data.shops.length===0){
+alert(
+"Bitte zuerst einen Laden erstellen"
+);
 
+return;
 
-        alert(
-            "Bitte zuerst einen Laden erstellen"
-        );
-
-
-        return;
-
-    }
+}
 
 
+let select =
+document.getElementById(
+"productShop"
+);
 
 
-    let select =
-    document.getElementById(
-        "productShop"
-    );
+select.innerHTML = "";
 
 
+data.shops.forEach(shop => {
 
-    select.innerHTML="";
-
-
-
-    data.shops.forEach(shop=>{
+let option =
+document.createElement("option");
 
 
-        let option =
-        document.createElement("option");
+option.value = shop;
+option.textContent = shop;
 
 
-        option.value=shop;
+select.appendChild(option);
 
-        option.textContent=shop;
-
-
-        select.appendChild(option);
+});
 
 
-    });
-
-
-
-
-    document.getElementById(
-        "productModal"
-    )
-    .classList.remove("hidden");
+document.getElementById(
+"productModal"
+)
+.classList.remove("hidden");
 
 
 }
 
 
-
-
-
-
-
-
-
-
+// ===================================
 // MENGE ÄNDERN
+// ===================================
 
-function changeAmount(index,value){
+async function changeAmount(index,value){
 
-
-    let product =
-    data.products[index];
-
-
-
-    if(
-        value===-1 &&
-        product.count<=1
-    ){
-
-        return;
-
-    }
+let product =
+data.products[index];
 
 
+if(
+value === -1 &&
+product.count <= 1
+){
 
-    product.count+=value;
-
-
-
-    saveData();
-
-    render();
-
+return;
 
 }
 
 
+let newAmount =
+product.count + value;
 
 
+const { error } =
+await supabaseClient
+.from("products")
+.update({
+count: newAmount
+})
+.eq(
+"id",
+product.id
+)
+.eq(
+"user_id",
+currentUser
+);
+
+if(error){
+
+console.log(error);
+return;
+
+}
 
 
+await loadData();
+
+}
 
 
-
-
+// ===================================
 // PRODUKT LÖSCHEN
+// ===================================
 
-function removeProduct(index){
+async function removeProduct(index){
 
-
-    data.products.splice(
-        index,
-        1
-    );
+let product =
+data.products[index];
 
 
+const { error } =
+await supabaseClient
+.from("products")
+.delete()
+.eq(
+"id",
+product.id
+)
+.eq(
+"user_id",
+currentUser
+);
 
-    saveData();
 
-    render();
+if(error){
 
+console.log(error);
+return;
 
 }
 
 
+await loadData();
+
+}
 
 
-
-
-
-
-
-// ANZEIGE
+// ===================================
+// RENDER
+// ===================================
 
 function render(){
 
+let shopsBox =
+document.getElementById("shops");
 
-    let shopsBox =
-    document.getElementById("shops");
 
+let shopList =
+document.getElementById("shopList");
 
-    let shopList =
-    document.getElementById("shopList");
 
+let productsBox =
+document.getElementById("products");
 
-    let productsBox =
-    document.getElementById("products");
 
+shopsBox.innerHTML = "";
+shopList.innerHTML = "";
+productsBox.innerHTML = "";
 
 
-    shopsBox.innerHTML="";
-    shopList.innerHTML="";
-    productsBox.innerHTML="";
 
+data.shops.forEach(
+(shop,index)=>{
 
 
+let div =
+document.createElement("div");
 
 
-    // DESKTOP SIDEBAR
+div.className="shop";
 
-    data.shops.forEach(
-    (shop,index)=>{
 
+div.innerHTML=`
 
-        let div =
-        document.createElement("div");
+<span>${shop}</span>
 
+<span onclick="deleteShop(${index})"
+style="cursor:pointer;font-size:22px">
+❌
+</span>
 
-        div.className="shop";
+`;
 
 
-        div.innerHTML=`
+shopsBox.appendChild(div);
 
-        <span>${shop}</span>
 
-        <span onclick="deleteShop(${index})"
-        style="cursor:pointer;font-size:22px">
-        ❌
-        </span>
 
-        `;
+let list =
+div.cloneNode(true);
 
 
+shopList.appendChild(list);
 
-        shopsBox.appendChild(div);
 
+});
 
 
-        let list =
-        div.cloneNode(true);
+data.shops.forEach(
+shop=>{
 
 
-        shopList.appendChild(list);
+let products =
+data.products.filter(
+p=>p.shop===shop
+);
 
 
+if(products.length===0)
+return;
 
-    });
 
 
+let panel =
+document.createElement("div");
 
 
+panel.className="shop-panel";
 
 
+panel.innerHTML=
+`
+<h2>
+🏪 ${shop}
+</h2>
+`;
 
 
 
+products.forEach(
+product=>{
 
-    // PRODUKTE
 
-    data.shops.forEach(
-    shop=>{
+let index =
+data.products.findIndex(
+p => p.id === product.id
+);
 
 
-        let products =
-        data.products.filter(
-            p=>p.shop===shop
-        );
 
+let item =
+document.createElement("div");
 
 
-        if(products.length===0)
-            return;
+item.className="product";
 
 
+item.innerHTML=
 
-        let panel =
-        document.createElement("div");
 
+`
 
+<div class="product-line">
 
-        panel.className="shop-panel";
+<b>
+${product.produktname}
+</b>
 
+<span>
+${product.count} ${product.unit}
+</span>
 
+</div>
 
-        panel.innerHTML=
-        `
-        <h2>
-        🏪 ${shop}
-        </h2>
-        `;
 
+<div class="note">
 
+${product.note || ""}
 
+</div>
 
-        products.forEach(
-        product=>{
 
+<div class="actions">
 
-            let index =
-            data.products.indexOf(product);
 
+<span onclick="changeAmount(${index},1)">
+⬆️
+</span>
 
 
-            let item =
-            document.createElement("div");
+<span onclick="changeAmount(${index},-1)">
+⬇️
+</span>
 
 
+<span onclick="removeProduct(${index})">
+❌
+</span>
 
-            item.className="product";
 
+</div>
 
+`;
 
-            item.innerHTML=
 
-            `
 
-            <div class="product-line">
+panel.appendChild(item);
 
-            <b>
-            ${product.name}
-            </b>
 
+});
 
-            <span>
-            ${product.count} ${product.unit}
-            </span>
 
+productsBox.appendChild(panel);
 
-            </div>
 
-
-
-            <div class="note">
-
-            ${product.note || ""}
-
-            </div>
-
-
-
-            <div class="actions">
-
-
-            <span onclick="changeAmount(${index},1)">
-            ⬆️
-            </span>
-
-
-            <span onclick="changeAmount(${index},-1)">
-            ⬇️
-            </span>
-
-
-            <span onclick="removeProduct(${index})">
-            ❌
-            </span>
-
-
-            </div>
-
-            `;
-
-
-
-            panel.appendChild(item);
-
-
-
-        });
-
-
-
-        productsBox.appendChild(panel);
-
-
-
-    });
+});
 
 
 }
-
-
-
-
-
-
-
-
-
+ 
+// ===================================
 // SEITE WECHSELN
+// ===================================
 
 function showPage(page){
 
+document.getElementById("home")
+.classList.add("hidden");
 
 
-    document.getElementById("home")
-    .classList.add("hidden");
+document.getElementById("shopsPage")
+.classList.add("hidden");
 
 
-    document.getElementById("shopsPage")
-    .classList.add("hidden");
+document.getElementById("settings")
+.classList.add("hidden");
 
 
-    document.getElementById("settings")
-    .classList.add("hidden");
-
-
-
-
-    document.getElementById(page)
-    .classList.remove("hidden");
+document.getElementById(page)
+.classList.remove("hidden");
 
 
 
-
-    let title =
-    document.getElementById(
-        "pageTitle"
-    );
-
+let title =
+document.getElementById(
+"pageTitle"
+);
 
 
-    if(page==="home"){
 
-        title.textContent="Liste";
-
-    }
+if(page==="home")
+title.textContent="Liste";
 
 
-    if(page==="shopsPage"){
-
-        title.textContent="Meine Läden";
-
-    }
+if(page==="shopsPage")
+title.textContent="Meine Läden";
 
 
-    if(page==="settings"){
-
-        title.textContent="Einstellungen";
-
-    }
+if(page==="settings")
+title.textContent="Einstellungen";
 
 
 }
 
 
-
-
-
-
-
-
-
+// ===================================
 // LOGOUT
+// ===================================
 
-function logout(){
+async function logout(){
 
-
-    currentUser=null;
-
-
-
-    document.getElementById("app")
-    .style.display="none";
+await supabaseClient.auth.signOut();
 
 
-    document.getElementById("login")
-    .style.display="block";
+currentUser = null;
 
+
+document.getElementById("app")
+.style.display = "none";
+
+
+document.getElementById("login")
+.style.display = "block";
 
 }
-
-
-
-
-
-
-
-
-
-// MODAL SCHLIESSEN + LEEREN
+// ===================================
+// MODAL SCHLIESSEN
+// ===================================
 
 function closeProductModal(){
 
-
-    document.getElementById("productName").value="";
-
-
-    document.getElementById("productAmount").value="";
+document.getElementById("productName").value="";
+document.getElementById("productAmount").value="";
+document.getElementById("productNote").value="";
 
 
-    document.getElementById("productNote").value="";
-
-
-
-    document.getElementById("productModal")
-    .classList.add("hidden");
+document.getElementById("productModal")
+.classList.add("hidden");
 
 
 }
 
 
-
-
-
-
-
-
-
+// ===================================
 // PRODUKT SPEICHERN
+// ===================================
 
-function saveProduct(){
+async function saveProduct(){
+
+    let name = 
+    document.getElementById("productName").value.trim();
 
 
-    let name =
-    document.getElementById("productName").value;
-
-
-    let shop =
+    let shop = 
     document.getElementById("productShop").value;
 
 
@@ -773,10 +746,8 @@ function saveProduct(){
     document.getElementById("productUnit").value;
 
 
-
     let note =
     document.getElementById("productNote").value;
-
 
 
 
@@ -791,43 +762,74 @@ function saveProduct(){
     }
 
 
+    // Prüfen welcher User angemeldet ist
+    const { data: userData, error: userError } =
+    await supabaseClient.auth.getUser();
 
 
+    console.log("Supabase User:", userData.user);
+    console.log("currentUser:", currentUser);
 
-    data.products.push({
 
-        name:name,
+    if(userError || !userData.user){
 
-        count:amount,
+        alert(
+            "Kein Benutzer angemeldet"
+        );
 
-        unit:unit,
+        console.log(userError);
 
-        shop:shop,
+        return;
 
-        note:note
+    }
+
+
+    const { error } =
+    await supabaseClient
+    .from("products")
+    .insert({
+
+        user_id: userData.user.id,
+
+        produktname: name,
+
+        count: amount,
+
+        unit: unit,
+
+        shop: shop,
+
+        note: note
 
     });
 
 
 
+    if(error){
+
+        console.log("SUPABASE FEHLER:", error);
+
+        alert(error.message);
+
+        return;
+
+    }
 
 
-    saveData();
-
-    render();
+    console.log("Produkt erfolgreich gespeichert");
 
 
+    await loadData();
 
-
-    // Fenster bleibt offen,
-    // Felder werden geleert
 
 
     document.getElementById("productName").value="";
-
     document.getElementById("productAmount").value="";
-
     document.getElementById("productNote").value="";
+
+
+    document.getElementById("productModal")
+    .classList.add("hidden");
 
 
 }
